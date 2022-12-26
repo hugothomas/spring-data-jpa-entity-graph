@@ -5,6 +5,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 import com.cosium.spring.data.jpa.entity.graph.BaseTest;
 import com.cosium.spring.data.jpa.entity.graph.domain2.EntityGraph;
 import com.cosium.spring.data.jpa.entity.graph.domain2.NamedEntityGraph;
+import com.cosium.spring.data.jpa.entity.graph.sample.InventoryItem;
+import com.cosium.spring.data.jpa.entity.graph.sample.InventoryItemEntityGraph;
 import com.cosium.spring.data.jpa.entity.graph.sample.Maker;
 import com.cosium.spring.data.jpa.entity.graph.sample.MakerEntityGraph;
 import com.github.springtestdbunit.annotation.DatabaseSetup;
@@ -26,6 +28,7 @@ import org.springframework.transaction.annotation.Transactional;
 class RepositoryTest extends BaseTest {
 
   @Inject private MakerRepository makerRepository;
+  @Inject private InventoryItemRepository inventoryItemRepository;
 
   @Transactional
   @Test
@@ -62,6 +65,19 @@ class RepositoryTest extends BaseTest {
     }
   }
 
+  @Transactional
+  @Test
+  @DisplayName("qsdqsd")
+  void test4() {
+    List<InventoryItem> inventoryItems =
+        inventoryItemRepository.findByName("inventoryItem 1", InventoryItemEntityGraph.NOOP);
+    assertThat(inventoryItems).isNotEmpty();
+    for (InventoryItem inventoryItem : inventoryItems) {
+      assertThat(Hibernate.isInitialized(inventoryItem.getEmbeddableItem().getItem().getProduct()))
+          .isTrue();
+    }
+  }
+
   /**
    * Created on 17/03/17.
    *
@@ -72,5 +88,9 @@ class RepositoryTest extends BaseTest {
     List<Maker> findByName(String name, EntityGraph entityGraph);
 
     Stream<Maker> readByName(String name, EntityGraph entityGraph);
+  }
+
+  public interface InventoryItemRepository extends Repository<InventoryItem, Long> {
+    List<InventoryItem> findByName(String name, EntityGraph entityGraph);
   }
 }

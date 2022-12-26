@@ -24,5 +24,9 @@
     <product id="11" name="Product 11" brand_id="2" maker_id="1" category_id="1" barcode="11111111"/>
     <product id="12" name="Product 12" brand_id="2" maker_id="1" category_id="1" barcode="12121212"/>
 
+    <item id="1" name="item 1" product_id="1"/>
+
+    <inventoryItem id="1" name="inventoryItem 1" item_id="1" productName="Product 1"/>
+
     <defaultentitygraphtest_entity id="1" maker_id="1"/>
 </dataset>
